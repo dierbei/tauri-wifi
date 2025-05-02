@@ -51,10 +51,11 @@ jobs:
           ndk-version: r25b
           local-cache: true
 
+      - name: Initialize Android target for Tauri
+        run: npm run tauri android init
+
       - name: Build unsigned Android APK with Tauri
-        run: |
-            npm run tauri android init
-            npm run tauri android build --target aarch64
+        run: npm run tauri android build -- --target aarch64
         env:
           NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
