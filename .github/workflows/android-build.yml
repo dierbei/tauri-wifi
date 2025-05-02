@@ -43,26 +43,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-    #   - name: Set up JDK
-    #     uses: actions/setup-java@v3
-    #     with:
-    #       distribution: 'zulu'
-    #       java-version: '17'
 
-    #   - name: Setup Android NDK
-    #     uses: nttld/setup-ndk@v1
-    #     id: setup-ndk
-    #     with:
-    #       ndk-version: r25b
-    #       local-cache: true
       - name: Set up Android NDK
         uses: android-actions/setup-android@v3
         with:
-          ndk-version: '25.2.9519653'  # 使用最新的 LTS 版本
+          ndk-version: '25.2.9519653'
           cmake-version: '3.22.1'
-          #cache: false  # 暂时禁用缓存以避免 422 错误
-        env:
-          NDK_HOME: ${{ github.workspace }}/android-ndk-r25c
 
       - name: Configure environment
         run: |
@@ -71,18 +57,11 @@ jobs:
           echo "$ANDROID_NDK_ROOT" >> $GITHUB_PATH
           ls -la $ANDROID_NDK_ROOT  # 验证目录存在
 
-    #   - name: Configure environment
-    #     run: |
-    #       echo "NDK_HOME=${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_ENV
-    #       echo "${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_PATH
-
       - name: Initialize Android target for Tauri
         run: npm run tauri android init
 
       - name: Build unsigned Android APK with Tauri
-        run: npm run tauri android build 
-        env:
-          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: npm run tauri android build
 
       - name: Upload unsigned APK artifact
         uses: actions/upload-artifact@v4
