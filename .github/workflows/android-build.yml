@@ -100,11 +100,12 @@ jobs:
             --out app-universal-release-signed.apk \
             src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
 
-      - name: Upload APK to GitHub Release
+      - name: Upload signed APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: apk-release
-          name: APK Release ${{ env.SHORT_SHA }}
-          files: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+            tag_name: apk-release
+            name: APK Release ${{ env.SHORT_SHA }}
+            files: app-universal-release-signed.apk  # ✅ 改为上传签名后的文件
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
