@@ -77,7 +77,7 @@ jobs:
           NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upload unsigned APK artifact
-        uses: actions/upload-artifact@v4a
+        uses: actions/upload-artifact@v4
         with:
           name: unsigned-apk-${{ env.SHORT_SHA }}
           path: src-tauri/gen/android/app/build/outputs/apk/arm64/release/*.apk
