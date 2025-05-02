@@ -59,14 +59,22 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           ndk-version: '25.2.9519653'  # 使用最新的 LTS 版本
+          cmake-version: '3.22.1'
           #cache: false  # 暂时禁用缓存以避免 422 错误
         env:
           NDK_HOME: ${{ github.workspace }}/android-ndk-r25c
 
       - name: Configure environment
         run: |
-          echo "NDK_HOME=${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_ENV
-          echo "${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_PATH
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
+          echo "$ANDROID_NDK_ROOT" >> $GITHUB_PATH
+          ls -la $ANDROID_NDK_ROOT  # 验证目录存在
+
+    #   - name: Configure environment
+    #     run: |
+    #       echo "NDK_HOME=${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_ENV
+    #       echo "${{ github.workspace }}/android-ndk-r25c" >> $GITHUB_PATH
 
       - name: Initialize Android target for Tauri
         run: npm run tauri android init
