@@ -61,10 +61,11 @@ jobs:
         run: npm run tauri android init
 
       - name: Build unsigned Android APK with Tauri
-        run: npm run tauri android build
+        run: npm run tauri android build --target aarch64 
 
       - name: Upload unsigned APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-apk-${{ env.SHORT_SHA }}
           path: src-tauri/gen/android/app/build/outputs/apk/arm64/release/*.apk
+      
