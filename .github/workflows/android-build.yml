@@ -37,6 +37,7 @@ jobs:
           targets: aarch64-linux-android
     
       - name: Cache Rust build
+        id: cache-rust  # 👈 重要：用于后续引用 cache-hit
         uses: actions/cache@v3
         with:
             path: |
@@ -46,6 +47,14 @@ jobs:
             key: rust-cache-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
             restore-keys: |
               rust-cache-${{ runner.os }}-
+
+      - name: Check Rust cache hit
+        run: |
+          if [ "${{ steps.cache-rust.outputs.cache-hit }}" = "true" ]; then
+            echo "✅ Rust cache HIT — 依赖与 Cargo.lock 匹配，跳过重新编译"
+          else
+            echo "❌ Rust cache MISS — Cargo.lock 变更或首次构建，重新编译全部依赖"
+          fi 
 
       - name: Install Linux dependencies for Tauri
         run: |
@@ -77,11 +86,19 @@ jobs:
       - name: Build unsigned Android APK with Tauri
         run: npm run tauri android build -- --target aarch64
 
-      - name: Upload unsigned APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: unsigned-apk-${{ env.SHORT_SHA }}
-          path: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+      - name: Decode keystore from base64
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 -d > my-release-key.jks
+      
+      - name: Sign APK
+        run: |
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
+            --ks my-release-key.jks \
+            --ks-key-alias ${{ secrets.SIGNING_KEY_ALIAS }} \
+            --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} \
+            --key-pass pass:${{ secrets.SIGNING_KEY_ALIAS_PASSWORD }} \
+            --out app-universal-release-signed.apk \
+            src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
 
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v1

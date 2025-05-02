@@ -59,3 +59,6 @@ src-tauri/dist/
 .cache/
 .temp/
 .tmp/
+
+my-release-key.jks
+keystore.b64.txt
