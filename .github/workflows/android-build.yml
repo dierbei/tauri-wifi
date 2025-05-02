@@ -68,5 +68,12 @@ jobs:
         with:
           name: unsigned-apk-${{ env.SHORT_SHA }}
           path: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
-      
-      
+
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: apk-release
+          name: APK Release ${{ env.SHORT_SHA }}
+          files: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
