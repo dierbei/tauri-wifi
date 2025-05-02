@@ -38,16 +38,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev webkit2gtk-4.1
 
-    #   - name: Setup Java
-    #     uses: actions/setup-java@v4
-    #     with:
-    #       distribution: temurin
-    #       java-version: 17
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
+    #   - name: Set up JDK
+    #     uses: actions/setup-java@v3
+    #     with:
+    #       distribution: 'zulu'
+    #       java-version: '17'
 
     #   - name: Setup Android NDK
     #     uses: nttld/setup-ndk@v1
@@ -56,10 +56,10 @@ jobs:
     #       ndk-version: r25b
     #       local-cache: true
       - name: Set up Android NDK
-        uses: nttld/setup-ndk@v2  # 使用 v2 版本替代 v1
+        uses: android-actions/setup-android@v3
         with:
-            ndk-version: 'r25c'  # 使用更新的 NDK 版本
-            cache: false  # 暂时禁用缓存以避免 422 错误
+          ndk-version: '25.2.9519653'  # 使用最新的 LTS 版本
+          #cache: false  # 暂时禁用缓存以避免 422 错误
         env:
           NDK_HOME: ${{ github.workspace }}/android-ndk-r25c
 
