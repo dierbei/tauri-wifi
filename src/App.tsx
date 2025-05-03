@@ -7,34 +7,29 @@ import Database from '@tauri-apps/plugin-sql';
 // when using `"withGlobalTauri": true`, you may use
 // const Database = window.__TAURI__.sql;
 
-const db = await Database.load('mysql://root:my-secret-pw@localhost:3306/mydb');
+type Student = {
+  name: string;
+  sex: string;
+  age: number;
+};
 
 function App() {
-  // const [greetMsg, setGreetMsg] = useState("");
-  // const [students, setStudents] = useState("");
+  useEffect(() => {
+    list_student();
+    getDb()
+  }, []); 
 
-  // async function greet() {
-  //   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  //   // setGreetMsg(await invoke("greet", { name }));
-  // }
-
-  type Student = {
-    name: string;
-    sex: string;
-    age: number;
-  };
-
+  const [db, setDb] = useState<Database | null>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
   async function list_student() {
-    // const res = await invoke<Student[]>("list_student");
-    // console.log(res);
-    // setStudents(res);
-    // showToastMessage("学生列表已更新");
+    if (!db) {
+      showToastMessage("数据库未链接");
+      return;
+    }
 
-    // await db.execute('INSERT INTO ...');
     const res = await db.select<Student[]>("select * from students;");
     console.log(res);
     setStudents(res);
@@ -49,9 +44,11 @@ function App() {
     }, 3000); // 3秒后自动隐藏
   }
 
-  useEffect(() => {
-    list_student();
-  }, []); // 空依赖数组表示只在组件挂载时执行一次
+  async function getDb() {
+    const db = await Database.load('mysql://root:my-secret-pw@localhost:3306/mydb');
+    setDb(db);
+  }
+
 
   return (
     <div>
@@ -84,7 +81,7 @@ function App() {
                 <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" onClick={() => list_student()}>查询</a>
               </li>
               <li>
-                <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" onClick={() => showToastMessage("还没实现")}>Services</a>
+                <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" onClick={() => setStudents([])}>清空</a>
               </li>
               <li>
                 <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" onClick={() => showToastMessage("还没实现")}>Pricing</a>
