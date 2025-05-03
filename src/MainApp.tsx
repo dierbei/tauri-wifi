@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 // import "./App.css";
 
 import Database from '@tauri-apps/plugin-sql';
-import { invoke } from "@tauri-apps/api/core";
+// import { invoke } from "@tauri-apps/api/core";
 // when using `"withGlobalTauri": true`, you may use
 // const Database = window.__TAURI__.sql;
 
-import SplashScreen from "./Splashscreen";
-import MainApp from "./MainApp";
+// import SplashScreen from "./Splashscreen";
+// import MainApp from "./";
 
 
 
@@ -22,23 +22,23 @@ type Student = {
 // These contents can be copy-pasted below the existing code, don't replace the entire file!!
 
 // Utility function to implement a sleep function in TypeScript
-function sleep(seconds: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-}
+// function sleep(seconds: number): Promise<void> {
+//   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+// }
 
-// Setup function
-async function setup() {
-  // Fake perform some really heavy setup task
-  console.log('Performing really heavy frontend setup task...')
-  await sleep(3);
-  console.log('Frontend setup task complete!')
-  // Set the frontend task as being completed
-  invoke('set_complete', {task: 'frontend'})
-}
+// // Setup function
+// async function setup() {
+//   // Fake perform some really heavy setup task
+//   console.log('Performing really heavy frontend setup task...')
+//   await sleep(3);
+//   console.log('Frontend setup task complete!')
+//   // Set the frontend task as being completed
+//   invoke('set_complete', {task: 'frontend'})
+// }
 
 function MainApp() {
   useEffect(() => {
-    setup()
+    // setup()
     list_student();
     getDb()
   }, []); 
