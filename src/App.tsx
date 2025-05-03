@@ -45,7 +45,7 @@ function App() {
   }
 
   async function getDb() {
-    const db = await Database.load('mysql://root:my-secret-pw@localhost:3306/mydb');
+    const db = await Database.load('mysql://root:my-secret-pw@192.168.110.82:3306/mydb');
     setDb(db);
   }
 
