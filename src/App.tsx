@@ -11,8 +11,6 @@ import { useState, useEffect } from "react";
 import SplashScreen from "./Splashscreen";
 import MainApp from "./MainApp";
 
-
-
 // type Student = {
 //   name: string;
 //   sex: string;
