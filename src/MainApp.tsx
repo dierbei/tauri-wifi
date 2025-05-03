@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // import "./App.css";
 
 import Database from '@tauri-apps/plugin-sql';
-// import { invoke } from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/core";
 // when using `"withGlobalTauri": true`, you may use
 // const Database = window.__TAURI__.sql;
 
@@ -22,41 +22,28 @@ type Student = {
 // These contents can be copy-pasted below the existing code, don't replace the entire file!!
 
 // Utility function to implement a sleep function in TypeScript
-// function sleep(seconds: number): Promise<void> {
-//   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-// }
+function sleep(seconds: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}
 
-// // Setup function
-// async function setup() {
-//   // Fake perform some really heavy setup task
-//   console.log('Performing really heavy frontend setup task...')
-//   await sleep(3);
-//   console.log('Frontend setup task complete!')
-//   // Set the frontend task as being completed
-//   invoke('set_complete', {task: 'frontend'})
-// }
+// Setup function
+async function setup() {
+  // Fake perform some really heavy setup task
+  console.log('Performing really heavy frontend setup task...')
+  await sleep(3);
+  console.log('Frontend setup task complete!')
+  // Set the frontend task as being completed
+  invoke('set_complete', {task: 'frontend'})
+}
 
-// // Effectively a JavaScript main function
-// window.addEventListener("DOMContentLoaded", () => {
-  
-// });
-
-function App() {
-  const [loading, setLoading] = useState(true);
-
-
+function MainApp() {
   useEffect(() => {
-    // 模拟初始化任务
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000); // 3 秒后切换到主页面
-
-    // setup()
-    // list_student();
-    // getDb()
+    setup()
+    list_student();
+    getDb()
   }, []); 
 
-  return loading ? <SplashScreen /> : <MainApp />;
+  // return loading ? <SplashScreen /> : <MainApp />;
 
 
   const [db, setDb] = useState<Database | null>(null);
@@ -306,42 +293,7 @@ function App() {
 
 
     </div>
-    // <main className="container">
-          
-
-
-    //   <h1>Welcome to Tauri + React</h1>
-
-    //   <div className="row">
-    //     <a href="https://vite.dev" target="_blank">
-    //       <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-    //     </a>
-    //     <a href="https://tauri.app" target="_blank">
-    //       <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-    //     </a>
-    //     <a href="https://react.dev" target="_blank">
-    //       <img src={reactLogo} className="logo react" alt="React logo" />
-    //     </a>
-    //   </div>
-    //   <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-    //   <form
-    //     className="row"
-    //     onSubmit={(e) => {
-    //       e.preventDefault();
-    //       greet();
-    //     }}
-    //   >
-    //     <input
-    //       id="greet-input"
-    //       onChange={(e) => setName(e.currentTarget.value)}
-    //       placeholder="Enter a name..."
-    //     />
-    //     <button type="submit">Greet</button>
-    //   </form>
-    //   <p>{greetMsg}</p>
-    // </main>
   );
 }
 
-export default App;
+export default MainApp;
